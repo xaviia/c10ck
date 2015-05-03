@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal" >
+
+    <!--Button
+        android:id="@+id/btnGetPreferences"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="NONE" /-->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/txtPrefs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="15dp"
+            android:text="222222"
+            android:layout_alignBottom="@+id/btnPrefs"
+            android:layout_toLeftOf="@+id/fmtext"
+            android:layout_toStartOf="@+id/fmtext" />
+
+        <Button
+            android:id="@+id/btnPrefs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SETTINGS"
+            android:layout_gravity="center_vertical"
+            android:layout_marginBottom="91dp"
+            android:layout_marginRight="65dp"
+            android:layout_marginEnd="65dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Large Text"
+            android:id="@+id/fmtext"
+            android:layout_marginTop="77dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true" />
+
+        <ImageView
+            android:id="@+id/img"
+            android:layout_width="100dip"
+            android:layout_height="100dip"
+            android:layout_above="@+id/btnPrefs"
+            android:layout_alignLeft="@+id/txtPrefs"
+            android:layout_alignStart="@+id/txtPrefs"
+            android:src="@drawable/profile"/>
+
+        <!--<Button-->
+            <!--android:id="@+id/camera"-->
+            <!--android:layout_width="100dip"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="開啟相機"-->
+            <!--android:layout_weight="1"-->
+            <!--android:layout_gravity="center_vertical"-->
+
+            <!--android:layout_alignTop="@+id/photo"-->
+            <!--android:layout_alignLeft="@+id/txtPrefs"-->
+            <!--android:layout_alignStart="@+id/txtPrefs" />-->
+
+        <!--android:layout_alignBaseline="@+id/photo"-->
+        <!--android:layout_alignBottom="@+id/photo"-->
+        <!--<Button-->
+            <!--android:id="@+id/photo"-->
+            <!--android:layout_width="100dip"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="開啟相簿"-->
+            <!--android:layout_weight="1"-->
+
+            <!--android:layout_toLeftOf="@+id/btnPrefs"-->
+            <!--android:layout_toStartOf="@+id/btnPrefs"-->
+            <!--android:layout_above="@+id/btnPrefs" />-->
+
+        <!--android:layout_gravity="center_vertical"-->
+        <!--android:layout_below="@+id/img"-->
+
+    </RelativeLayout><![CDATA[
+
+    //android:layout_gravity="right"
+    />
+
+]]>
+</LinearLayout>
