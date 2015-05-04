@@ -38,26 +38,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.FileNotFoundException;
-import java.util.List;
-import java.util.Locale;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.location.Address;
-import android.location.Criteria;
-import android.location.Geocoder;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.os.Bundle;
-import android.os.Debug;
-import android.provider.Settings;
-
-import android.widget.TextView;
-import android.widget.Toast;
-
-public class MyClock extends Activity implements LocationListener  {
+public class MyClock extends Activity {
     TextView textView, textView2;
     //宣告
     private ImageView mImg;
@@ -65,14 +47,9 @@ public class MyClock extends Activity implements LocationListener  {
     //private final static int CAMERA = 66 ;
     private final static int PHOTO = 99 ;
 
-    //location
-    private boolean getService = false;
-
     @Override
 
     public void onCreate(Bundle savedInstanceState) {
-
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_clock);
 
@@ -89,53 +66,45 @@ public class MyClock extends Activity implements LocationListener  {
         //Button camera = (Button) findViewById(R.id.camera);
         ImageView img = (ImageView) findViewById(R.id.img);
 
-        //location
-        testLocationProvider();
+    View.OnClickListener listener = new View.OnClickListener() {
 
-        View.OnClickListener listener = new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                switch (v.getId()) {
-                    case R.id.btnPrefs:
-                        Intent intent = new Intent(MyClock.this, PrefsActivity.class);
-                        startActivity(intent);
-                        break;
-                    //              case R.id.btnGetPreferences:
-                    //                  displaySharedPreferences();
-                    //                  break;
-                    //                case R.id.camera:
-                    //                    //開啟相機功能，並將拍照後的圖片存入SD卡相片集內，須由startActivityForResult且
-                    //                    //帶入
-                    //                    //requestCode進行呼叫，原因為拍照完畢後返回程式後則呼叫onActivityResult
-                    //                    ContentValues value = new ContentValues();
-                    //                    value.put(MediaStore.Video.Media.MIME_TYPE, "image/jpeg");
-                    //                    Uri uri= getContentResolver().insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,value);
-                    //                    Intent intent1 = new Intent("android.media.action.IMAGE_CAPTURE");
-                    //                    intent1.putExtra(MediaStore.EXTRA_OUTPUT, uri.getPath());
-                    //                    startActivityForResult(intent1, CAMERA);
-                    case R.id.img:
-                        //開啟相簿相片集，須由startActivityForResult且帶入requestCode進行呼叫，原因
-                        //為點選相片後返回程式呼叫onActivityResult
-                        Intent intent2 = new Intent();
-                        intent2.setType("image/*");
-                        intent2.setAction(Intent.ACTION_GET_CONTENT);
-                        startActivityForResult(intent2, PHOTO);
-                    default:
-                        break;
-                }
+        @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+                case R.id.btnPrefs:
+                    Intent intent = new Intent(MyClock.this,PrefsActivity.class);
+                    startActivity(intent);
+                    break;
+//              case R.id.btnGetPreferences:
+//                  displaySharedPreferences();
+//                  break;
+//                case R.id.camera:
+//                    //開啟相機功能，並將拍照後的圖片存入SD卡相片集內，須由startActivityForResult且
+//                    //帶入
+//                    //requestCode進行呼叫，原因為拍照完畢後返回程式後則呼叫onActivityResult
+//                    ContentValues value = new ContentValues();
+//                    value.put(MediaStore.Video.Media.MIME_TYPE, "image/jpeg");
+//                    Uri uri= getContentResolver().insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,value);
+//                    Intent intent1 = new Intent("android.media.action.IMAGE_CAPTURE");
+//                    intent1.putExtra(MediaStore.EXTRA_OUTPUT, uri.getPath());
+//                    startActivityForResult(intent1, CAMERA);
+                case R.id.img:
+                    //開啟相簿相片集，須由startActivityForResult且帶入requestCode進行呼叫，原因
+                    //為點選相片後返回程式呼叫onActivityResult
+                    Intent intent2 = new Intent();
+                    intent2.setType("image/*");
+                    intent2.setAction(Intent.ACTION_GET_CONTENT);
+                    startActivityForResult(intent2, PHOTO);
+                default:
+                    break;
             }
-        };
+        }
+    };
 
-
-
-
-
-
-        btnPrefs.setOnClickListener(listener);
-        //camera.setOnClickListener(listener);
-        img.setOnClickListener(listener);
-        //btnGetPrefs.setOnClickListener(listener);
+    btnPrefs.setOnClickListener(listener);
+    //camera.setOnClickListener(listener);
+    img.setOnClickListener(listener);
+    //btnGetPrefs.setOnClickListener(listener);
 
 
 
@@ -171,106 +140,11 @@ public class MyClock extends Activity implements LocationListener  {
             }
         });*/
 }
-    private void testLocationProvider() {
-        //®˙±o®t≤Œ©w¶Ï™A∞»
-        LocationManager status = (LocationManager) (this.getSystemService(Context.LOCATION_SERVICE));
-        if (status.isProviderEnabled(LocationManager.GPS_PROVIDER) || status.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-
-            getService = true;	//ΩTª{∂}±“©w¶Ï™A∞»
-            locationServiceInitial();
-        } else {
-            Toast.makeText(this, "testLocationProvider fail", Toast.LENGTH_LONG).show();
-            startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));	//∂}±“≥]©w≠∂≠±
-        }
-    }
-
-    private void getLocation(Location location) {	//±N©w¶Ï∏Í∞T≈„•‹¶bµe≠±§§
-        if(location != null) {
-            //Toast.makeText(this, "Hello!", Toast.LENGTH_LONG).show();
-//            TextView longitude_txt = (TextView) findViewById(R.id.longitude);
-//            TextView latitude_txt = (TextView) findViewById(R.id.latitude);
-            TextView place_txt = (TextView) findViewById(R.id.place_txt);
-
-//            Double longitude = location.getLongitude();	//®˙±o∏g´◊
-//            Double latitude = location.getLatitude();	//®˙±oΩn´◊
-//
-//            longitude_txt.setText(String.valueOf(longitude));
-//            latitude_txt.setText(String.valueOf(latitude));
-            place_txt.setText(getAddressByLocation(location));
-
-
-        }
-        else {
-            Toast.makeText(this, "can't define", Toast.LENGTH_LONG).show();
-        }
-    }
-    private LocationManager lms;
-    private String bestProvider = LocationManager.GPS_PROVIDER;	//≥Ã®Œ∏Í∞T¥£®—™Ã
-    private void locationServiceInitial() {
-        lms = (LocationManager) getSystemService(LOCATION_SERVICE);	//®˙±o®t≤Œ©w¶Ï™A∞»
-        Criteria criteria = new Criteria();	//∏Í∞T¥£®—™ÃøÔ®˙º–∑«
-        bestProvider = lms.getBestProvider(criteria, true);	//øÔæ‹∫Î∑«´◊≥Ã∞™™∫¥£®—™Ã
-        Location location = lms.getLastKnownLocation(bestProvider);
-        getLocation(location);
-    }
-
-    public String getAddressByLocation(Location location) {
-        String returnAddress = "";
-        try {
-            if (location != null) {
-                Double longitude = location.getLongitude();	//®˙±o∏g´◊
-                Double latitude = location.getLatitude();	//®˙±oΩn´◊
-
-                Double lo1 = 121.54159248;
-                Double la1 = 25.01943363;
-                Double d_lo1 = 0.00069201;
-                Double d_la1 = 0.00057116999;
-
-                if( Math.abs(lo1-longitude) < d_lo1 &&  Math.abs(la1-latitude) < d_la1)
-                    returnAddress = "德田";
-                else if(Math.abs(25.04189446-latitude) < 0.00030619 && Math.abs(121.52355731 - longitude) < 0.00078857)
-                    returnAddress = "男四/女四";
-                else if(Math.abs(25.02011903-latitude) < 0.00085554 && Math.abs(121.53766036 - longitude) < 0.00067592)
-                    returnAddress = "醉月湖";
-                else if(Math.abs(25.01764961-latitude) <0.00092362 && Math.abs(121.5409863 - longitude) <0.00049353)
-                    returnAddress = "圖書館";
-                else
-                    returnAddress = "somewhere";
-
-            }
-        }
-        catch(Exception e) {
-            e.printStackTrace();
-        }
-        return returnAddress;
-    }
-
     @Override
     public void onResume(){
         super.onResume();
         displaySharedPreferences();
-        // TODO Auto-generated method stub
-        super.onResume();
-        if(getService) {
-            lms.requestLocationUpdates(bestProvider, 1000, 1, this);
-            //™A∞»¥£®—™Ã°BßÛ∑s¿W≤v60000≤@¨Ì=1§¿ƒ¡°B≥Ãµu∂Z¬˜°B¶a¬IßÔ≈‹Æ…©I•s™´•Û
-        }
 
-    }
-    @Override
-    protected void onPause() {
-        // TODO Auto-generated method stub
-        super.onPause();
-        if(getService) {
-            lms.removeUpdates(this);	//¬˜∂}≠∂≠±Æ…∞±§ÓßÛ∑s
-        }
-    }
-
-    @Override
-    protected void onRestart() {	//±q®‰•¶≠∂≠±∏ı¶^Æ…
-        // TODO Auto-generated method stub
-        super.onRestart();
-        testLocationProvider();
     }
 
 
@@ -295,27 +169,6 @@ public class MyClock extends Activity implements LocationListener  {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-        // TODO Auto-generated method stub
-        getLocation(location);
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-
     }
 
     /**
@@ -470,5 +323,4 @@ public class MyClock extends Activity implements LocationListener  {
         }
 
     }
-
 }

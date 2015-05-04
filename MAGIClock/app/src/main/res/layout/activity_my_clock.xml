@@ -69,17 +69,12 @@
             android:layout_marginLeft="18dp"
             android:layout_marginBottom="18dp"/>
 
-        <TextView
+        <GridView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Location"
-            android:id="@+id/place_txt"
-            android:textSize="36dp"
-            android:textColor="#ff0f0074"
-            android:layout_below="@+id/btnPrefs"
-            android:layout_alignLeft="@+id/fmtext"
-            android:layout_alignStart="@+id/fmtext" />
+            android:id="@+id/gridView"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" />
 
 
         <!--<Button-->
