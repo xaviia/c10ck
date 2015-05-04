@@ -248,7 +248,28 @@ public class MyClock extends Activity implements LocationListener  {
     public void onResume(){
         super.onResume();
         displaySharedPreferences();
+        // TODO Auto-generated method stub
+        super.onResume();
+        if(getService) {
+            lms.requestLocationUpdates(bestProvider, 1000, 1, this);
+            //™A∞»¥£®—™Ã°BßÛ∑s¿W≤v60000≤@¨Ì=1§¿ƒ¡°B≥Ãµu∂Z¬˜°B¶a¬IßÔ≈‹Æ…©I•s™´•Û
+        }
 
+    }
+    @Override
+    protected void onPause() {
+        // TODO Auto-generated method stub
+        super.onPause();
+        if(getService) {
+            lms.removeUpdates(this);	//¬˜∂}≠∂≠±Æ…∞±§ÓßÛ∑s
+        }
+    }
+
+    @Override
+    protected void onRestart() {	//±q®‰•¶≠∂≠±∏ı¶^Æ…
+        // TODO Auto-generated method stub
+        super.onRestart();
+        testLocationProvider();
     }
 
 
