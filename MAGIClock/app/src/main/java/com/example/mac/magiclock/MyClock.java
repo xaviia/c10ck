@@ -186,7 +186,7 @@ public class MyClock extends Activity implements LocationListener  {
 
     private void getLocation(Location location) {	//±N©w¶Ï∏Í∞T≈„•‹¶bµe≠±§§
         if(location != null) {
-            Toast.makeText(this, "Hello!", Toast.LENGTH_LONG).show();
+            //Toast.makeText(this, "Hello!", Toast.LENGTH_LONG).show();
 //            TextView longitude_txt = (TextView) findViewById(R.id.longitude);
 //            TextView latitude_txt = (TextView) findViewById(R.id.latitude);
             TextView place_txt = (TextView) findViewById(R.id.place_txt);
