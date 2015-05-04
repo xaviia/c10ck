@@ -65,7 +65,6 @@ public class location extends Activity implements LocationListener {
 //            longitude_txt.setText(String.valueOf(longitude));
 //            latitude_txt.setText(String.valueOf(latitude));
 //            place_txt.setText(getAddressByLocation(location));
-            getAddressByLocation(location);
         }
         else {
             Toast.makeText(this, "can't define", Toast.LENGTH_LONG).show();

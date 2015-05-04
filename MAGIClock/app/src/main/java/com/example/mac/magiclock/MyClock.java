@@ -90,7 +90,7 @@ public class MyClock extends Activity implements LocationListener  {
         ImageView img = (ImageView) findViewById(R.id.img);
 
         //location
-       testLocationProvider();
+        testLocationProvider();
 
         View.OnClickListener listener = new View.OnClickListener() {
 
@@ -189,15 +189,16 @@ public class MyClock extends Activity implements LocationListener  {
             Toast.makeText(this, "Hello!", Toast.LENGTH_LONG).show();
 //            TextView longitude_txt = (TextView) findViewById(R.id.longitude);
 //            TextView latitude_txt = (TextView) findViewById(R.id.latitude);
-//            TextView place_txt = (TextView) findViewById(R.id.place_text);
+            TextView place_txt = (TextView) findViewById(R.id.place_txt);
 
 //            Double longitude = location.getLongitude();	//®˙±o∏g´◊
 //            Double latitude = location.getLatitude();	//®˙±oΩn´◊
 //
 //            longitude_txt.setText(String.valueOf(longitude));
 //            latitude_txt.setText(String.valueOf(latitude));
-//            place_txt.setText(getAddressByLocation(location));
-            getAddressByLocation(location);
+            place_txt.setText(getAddressByLocation(location));
+
+
         }
         else {
             Toast.makeText(this, "can't define", Toast.LENGTH_LONG).show();
