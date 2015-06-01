@@ -34,10 +34,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.FileNotFoundException;
+import java.net.Socket;
 import java.util.List;
 import java.util.Locale;
 
@@ -56,8 +58,55 @@ import android.provider.Settings;
 
 import android.widget.TextView;
 import android.widget.Toast;
+import java.io.IOException;
+import android.annotation.SuppressLint;
+import android.os.Handler;
+import android.os.Message;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.TextView;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+import android.support.v7.app.ActionBarActivity;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import java.net.URL;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.parser.Parser;
+import org.jsoup.select.Elements;
+import java.io.*;
+import java.net.*;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.Socket;
+import android.os.Bundle;
+import android.app.Activity;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+
+
 
 public class MyClock extends Activity implements LocationListener  {
+
+    //================== button get postion
+    Socket MyClient;
+
+    static EditText ed;
+    static Button btn;
+    static TextView tv1,tv2;
+    static String str1="0", str2="0";
+
+    String title;
+    //==================
+
     TextView textView, textView2;
     //宣告
     private ImageView mImg;
@@ -69,7 +118,6 @@ public class MyClock extends Activity implements LocationListener  {
     private boolean getService = false;
 
     @Override
-
     public void onCreate(Bundle savedInstanceState) {
 
 
@@ -80,6 +128,31 @@ public class MyClock extends Activity implements LocationListener  {
         //Button btnGetPrefs = (Button) findViewById(R.id.btnGetPreferences);
         textView = (TextView) findViewById(R.id.txtPrefs);
         textView2 = (TextView) findViewById(R.id.fmtext);
+
+        //========get postion botton
+        ed = (EditText) findViewById(R.id.edt);
+        btn = (Button)findViewById(R.id.get2);
+        tv1 = (TextView)findViewById(R.id.position);
+        tv2 = (TextView)findViewById(R.id.position2);
+
+        btn.setOnClickListener(new OnClickListener()
+        {
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                Thread t = new thread();
+                t.start();
+                try {
+                    t.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                tv1.setText(str1);
+                tv2.setText(str2);
+            }
+
+        });
+        //========
 
         //讀取手機解析度
         mPhone = new DisplayMetrics();
@@ -181,6 +254,34 @@ public class MyClock extends Activity implements LocationListener  {
         } else {
             Toast.makeText(this, "testLocationProvider fail", Toast.LENGTH_LONG).show();
             startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));	//∂}±“≥]©w≠∂≠±
+        }
+    }
+
+    class thread extends Thread{
+        public void run() {
+            str1="run";
+            try{
+                str1 = "Waitting to connect......";
+                String server=ed.getText().toString();
+                int servPort=8000;
+                Socket socket=new Socket("10.5.6.174",servPort);
+                InputStream in=socket.getInputStream();
+                OutputStream out=socket.getOutputStream();
+                str1 = "Connected!!";
+                byte[] rebyte = new byte[18];
+                in.read(rebyte);
+//                str2 ="(Client端)接收的文字:"+ new String(new String(rebyte));
+                str2 ="(Client端)接收的文字:";
+                String str = "android client string";
+                str1 = "(Client端)傳送的文字:"+str;
+                byte[] sendstr = new byte[21];
+                System.arraycopy(str.getBytes(), 0, sendstr, 0, str.length());
+                out.write(sendstr);
+            }catch(Exception e)
+            {
+                str1 = "fuch u !!!";
+                str2 = "fuch u, too !!!";
+            }
         }
     }
 
