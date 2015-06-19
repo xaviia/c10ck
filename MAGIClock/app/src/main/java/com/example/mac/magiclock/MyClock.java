@@ -2,7 +2,6 @@ package com.example.mac.magiclock;
 
 import android.app.Activity;
 import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,15 +13,11 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
-import android.graphics.Xfermode;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.preference.PreferenceManager;
-import android.provider.MediaStore;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.AttributeSet;
@@ -33,7 +28,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.os.Build;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -41,58 +35,15 @@ import android.widget.TextView;
 
 import java.io.FileNotFoundException;
 import java.net.Socket;
-import java.util.List;
-import java.util.Locale;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.location.Address;
 import android.location.Criteria;
-import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.Bundle;
-import android.os.Debug;
 import android.provider.Settings;
 
-import android.widget.TextView;
 import android.widget.Toast;
-import java.io.IOException;
-import android.annotation.SuppressLint;
-import android.os.Handler;
-import android.os.Message;
-import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.TextView;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-import android.support.v7.app.ActionBarActivity;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-import java.net.URL;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.parser.Parser;
-import org.jsoup.select.Elements;
-import java.io.*;
-import java.net.*;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.Socket;
-import android.os.Bundle;
-import android.app.Activity;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-
 
 
 public class MyClock extends Activity implements LocationListener  {
@@ -100,14 +51,13 @@ public class MyClock extends Activity implements LocationListener  {
     //================== button get postion
     Socket MyClient;
 
-    static EditText ed;
     static Button btn;
-    static TextView tv1,tv2;
+    static TextView tv1,tv2,tv_srvr,tv_port;
     static String str1="0", str2="0";
 
-    String title;
+    String msg_from_server;
     //==================
-
+    TextView place_txt;
     TextView textView, textView2;
     //宣告
     private ImageView mImg;
@@ -129,9 +79,11 @@ public class MyClock extends Activity implements LocationListener  {
         //Button btnGetPrefs = (Button) findViewById(R.id.btnGetPreferences);
         textView = (TextView) findViewById(R.id.txtPrefs);
         textView2 = (TextView) findViewById(R.id.fmtext);
+        place_txt = (TextView) findViewById(R.id.place_txt);
 
         //========get postion botton
-        ed = (EditText) findViewById(R.id.edt);
+        tv_srvr = (TextView) findViewById(R.id.server);
+        tv_port = (TextView) findViewById(R.id.port);
         btn = (Button)findViewById(R.id.get2);
         tv1 = (TextView)findViewById(R.id.position);
         tv2 = (TextView)findViewById(R.id.position2);
@@ -141,7 +93,8 @@ public class MyClock extends Activity implements LocationListener  {
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                Thread t = new thread();
+                str1 = "click";
+                Thread t = new thread2();
                 t.start();
                 try {
                     t.sleep(1000);
@@ -263,13 +216,40 @@ public class MyClock extends Activity implements LocationListener  {
             Log.d("happy run", "2");
             str1="run";
             try{
-//                str1 = "Waitting to connect......";
-                String server=ed.getText().toString();
-                int servPort=8033;
-                String addr = "140.112.30.38";
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(MyClock.this);
+                String server=prefs.getString("host", "Default name");
+                String port=prefs.getString("port", "Default name");
+//                int servPort=8033;
+//                String addr = "140.112.30.38";
                 Log.d("server happy:",server);
                 SocketClient client = new SocketClient();
-                str2 = client.cnnct(server, servPort);
+                StringBuilder msg = new StringBuilder();
+                msg.append("1 "+textView.getText().toString()+" "+place_txt.getText().toString());
+                str2 = client.cnnct(server, Integer.parseInt(port),msg.toString(),1);
+                str1 = "Connected!!";
+            }catch(Exception e)
+            {
+                str1 = "fuch u !!!";
+//                str2 = "fuch u, too !!!";
+            }
+        }
+    }
+    class thread2 extends Thread{
+        public void run() {
+            Log.d("happy run", "2");
+            str1="run";
+            try{
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(MyClock.this);
+                String server=prefs.getString("host", "Default name");
+                String port=prefs.getString("port", "Default name");
+//                int servPort=8033;
+//                String addr = "140.112.30.38";
+                Log.d("server happy:",server);
+                SocketClient client = new SocketClient();
+                StringBuilder msg = new StringBuilder();
+                msg.append("0 ");
+                msg_from_server = client.cnnct(server, Integer.parseInt(port),msg.toString(),0);
+                str2 = msg_from_server;
                 str1 = "Connected!!";
             }catch(Exception e)
             {
@@ -284,7 +264,7 @@ public class MyClock extends Activity implements LocationListener  {
             //Toast.makeText(this, "Hello!", Toast.LENGTH_LONG).show();
 //            TextView longitude_txt = (TextView) findViewById(R.id.longitude);
 //            TextView latitude_txt = (TextView) findViewById(R.id.latitude);
-            TextView place_txt = (TextView) findViewById(R.id.place_txt);
+
 
 //            Double longitude = location.getLongitude();	//®˙±o∏g´◊
 //            Double latitude = location.getLatitude();	//®˙±oΩn´◊
@@ -292,6 +272,16 @@ public class MyClock extends Activity implements LocationListener  {
 //            longitude_txt.setText(String.valueOf(longitude));
 //            latitude_txt.setText(String.valueOf(latitude));
             place_txt.setText(getAddressByLocation(location));
+
+            Thread t = new thread();
+            t.start();
+            try {
+                t.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            tv1.setText(str1);
+            tv2.setText(str2);
 
 
         }
@@ -322,13 +312,13 @@ public class MyClock extends Activity implements LocationListener  {
                 Double d_la1 = 0.00057116999;
 
                 if( Math.abs(lo1-longitude) < d_lo1 &&  Math.abs(la1-latitude) < d_la1)
-                    returnAddress = "德田";
+                    returnAddress = "csie_department";
                 else if(Math.abs(25.04189446-latitude) < 0.00030619 && Math.abs(121.52355731 - longitude) < 0.00078857)
-                    returnAddress = "男四/女四";
+                    returnAddress = "dorm";
                 else if(Math.abs(25.02011903-latitude) < 0.00085554 && Math.abs(121.53766036 - longitude) < 0.00067592)
-                    returnAddress = "醉月湖";
+                    returnAddress = "drunk_moon_lake";
                 else if(Math.abs(25.01764961-latitude) <0.00092362 && Math.abs(121.5409863 - longitude) <0.00049353)
-                    returnAddress = "圖書館";
+                    returnAddress = "library";
                 else
                     returnAddress = "somewhere";
 
@@ -433,13 +423,15 @@ public class MyClock extends Activity implements LocationListener  {
 
         String username = prefs.getString("your name", "Default NickName");
         String group = prefs.getString("Group name", "Default name");
+        String server = prefs.getString("host", "Default name");
+        String port = prefs.getString("port", "Default name");
         //String passw = prefs.getString("password", "Default Password");
         //boolean checkBox = prefs.getBoolean("checkBox", false);
         //String listPrefs = prefs.getString("listpref", "Default list prefs");
         StringBuilder builder = new StringBuilder();
         StringBuilder build = new StringBuilder();
-        builder.append(username + "\n");
-        build.append(group + "\n");
+        builder.append(username);
+        build.append(group);
         //builder.append(listPrefs + "\n");
 
         //builder.append("Password: " + passw + "\n");
@@ -448,6 +440,13 @@ public class MyClock extends Activity implements LocationListener  {
         //TextView textView;
         textView.setText(builder.toString());
         textView2.setText(build.toString());
+
+        StringBuilder bld = new StringBuilder();
+        bld.append("server IP: " + server + "\n");
+        tv_srvr.setText(bld.toString());
+        bld = new StringBuilder();
+        bld.append("port: " + port + "\n");
+        tv_port.setText(bld.toString());
     }
 
     //拍照完畢或選取圖片後呼叫此函式

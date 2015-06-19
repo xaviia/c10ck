@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
     <PreferenceCategory
-        android:summary="Username and password information"
         android:title="Login information" >
         <EditTextPreference
             android:key="your name"
@@ -15,18 +14,15 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:summary="Username and password information"
-        android:title="Settings" >
-        <CheckBoxPreference
-            android:key="checkBox"
-            android:summary="On/Off"
-            android:title="let others know where I am" />
+        android:title="Network Settings" >
+        <EditTextPreference
+            android:key="host"
+            android:summary="Enter server host name"
+            android:title="server IP" />
 
-        <ListPreference
-            android:entries="@array/listOptions"
-            android:entryValues="@array/listValues"
-            android:key="listpref"
-            android:summary="List preference example"
-            android:title="List preference" />
+        <EditTextPreference
+            android:key="port"
+            android:summary="Enter port number"
+            android:title="port" />
     </PreferenceCategory>
 </PreferenceScreen>

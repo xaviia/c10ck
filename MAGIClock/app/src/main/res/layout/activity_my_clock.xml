@@ -110,15 +110,17 @@
             android:layout_alignRight="@+id/get2"
             android:layout_alignEnd="@+id/get2" />
 
-        <EditText
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/edt"
+            android:id="@+id/server"
             android:layout_below="@+id/position2"
             android:layout_alignRight="@+id/position2"
             android:layout_alignEnd="@+id/position2"
             android:maxLength="50"
             android:text="10.5.6.174" />
+
+
 
         <TextView
             android:layout_width="wrap_content"
@@ -131,6 +133,16 @@
             android:layout_below="@+id/position"
             android:layout_alignLeft="@+id/position"
             android:layout_alignStart="@+id/position" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/port"
+            android:maxLength="50"
+            android:text="10.5.6.174"
+            android:layout_below="@+id/server"
+            android:layout_alignLeft="@+id/server"
+            android:layout_alignStart="@+id/server" />
 
 
         <!--<Button-->
