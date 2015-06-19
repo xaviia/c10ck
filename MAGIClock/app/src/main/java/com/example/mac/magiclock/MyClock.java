@@ -27,6 +27,7 @@ import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -259,28 +260,21 @@ public class MyClock extends Activity implements LocationListener  {
 
     class thread extends Thread{
         public void run() {
+            Log.d("happy run", "2");
             str1="run";
             try{
-                str1 = "Waitting to connect......";
+//                str1 = "Waitting to connect......";
                 String server=ed.getText().toString();
-                int servPort=8000;
-                Socket socket=new Socket("10.5.6.174",servPort);
-                InputStream in=socket.getInputStream();
-                OutputStream out=socket.getOutputStream();
+                int servPort=8033;
+                String addr = "140.112.30.38";
+                Log.d("server happy:",server);
+                SocketClient client = new SocketClient();
+                str2 = client.cnnct(server, servPort);
                 str1 = "Connected!!";
-                byte[] rebyte = new byte[18];
-                in.read(rebyte);
-//                str2 ="(Client端)接收的文字:"+ new String(new String(rebyte));
-                str2 ="(Client端)接收的文字:";
-                String str = "android client string";
-                str1 = "(Client端)傳送的文字:"+str;
-                byte[] sendstr = new byte[21];
-                System.arraycopy(str.getBytes(), 0, sendstr, 0, str.length());
-                out.write(sendstr);
             }catch(Exception e)
             {
                 str1 = "fuch u !!!";
-                str2 = "fuch u, too !!!";
+//                str2 = "fuch u, too !!!";
             }
         }
     }
